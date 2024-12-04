@@ -32,9 +32,10 @@ jobs:
                const coredemo = require('@actions/core')
                return await coredemo.getIDToken()
            result-encoding: string
-      - name: Set CI to false
+      - name: Set CI to false and build
         env:
           CI: false # Set CI to false
+        run: npm run build
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
