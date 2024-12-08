@@ -1,4 +1,8 @@
 {
+    "mimeTypes": {
+      ".js": "application/javascript",
+      ".css": "text/css"
+    },
     "routes": [
       {
         "route": "/static/*",
