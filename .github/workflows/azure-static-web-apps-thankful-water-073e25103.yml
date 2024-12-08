@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     env:
-      CI: false
+      process.env.CI: false
     permissions:
        id-token: write
        contents: read
