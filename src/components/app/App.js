@@ -1,45 +1,25 @@
 import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
-import ErroorBoundary from "../errorBoundary/ErrorBoundary";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { MainPage, ComicsPage, Page404, SingleComicPage, SingleCharacterPage } from "../pages/index";
 
-import decoration from '../../resources/img/vision.png';
-import { Component } from "react";
+const App = () => {
 
-class App extends Component {
-    state = {
-        selectedChar: null
-    }
-
-    onCharSelected = (id) => {
-        this.setState({
-            selectedChar: id
-        })
-    }
-
-    render() {
-        return (
+    return (
+        <Router>
             <div className="app">
                 <AppHeader />
                 <main>
-                    <ErroorBoundary>
-                        <RandomChar />
-                    </ErroorBoundary>                    
-                    <div className="char__content">
-                        <ErroorBoundary>
-                            <CharList onCharSelected={this.onCharSelected} />
-                        </ErroorBoundary>                        
-                        <ErroorBoundary>
-                            <CharInfo charId={this.state.selectedChar} />
-                        </ErroorBoundary>
-
-                    </div>
-                    <img className="bg-decoration" src={decoration} alt="vision" />
+                    <Routes>
+                        <Route path="/" element={<MainPage/>}/>
+                        <Route path="/comics" element={<ComicsPage/>}/>
+                        <Route path="/comics/:id" element={<SingleComicPage/>}/>
+                        <Route path="/characters/:id" element={<SingleCharacterPage/>}/>
+                        <Route path="*" element={<Page404/>}/>
+                    </Routes>
                 </main>
             </div>
-        )
-    }
+        </Router>
+    )
 }
 
 export default App;

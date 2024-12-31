@@ -1,7 +1,7 @@
 import { Component } from "react";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
-class ErroorBoundary extends Component {
+class ErrorBoundary extends Component {
     state = {
         error: false
     }
@@ -20,4 +20,4 @@ class ErroorBoundary extends Component {
     }
 }
 
-export default ErroorBoundary;
+export default ErrorBoundary;
