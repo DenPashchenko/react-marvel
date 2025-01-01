@@ -6,6 +6,21 @@ import { useState, useEffect, useRef } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
 
+const setContent = (process, data, Component, newItemLoading) => {
+    switch (process) {
+        case 'waiting':
+            return <Spinner />;
+        case 'loading':
+            return newItemLoading ? <Component data={data} /> : <Spinner />;
+        case 'confirmed':
+            return <Component data={data} />;
+        case 'error':
+            return <ErrorMessage />;
+        default:
+            throw new Error('Unexpected process state');
+    }
+}
+
 const CharList = (props) => {
 
     const [characters, setCharacters] = useState([]);
@@ -13,7 +28,7 @@ const CharList = (props) => {
     const [offset, setOffset] = useState(210);
     const [listEnded, setListEnded] = useState(false);
 
-    const { loading, error, getAllCharacters } = useMarvelService();
+    const { getAllCharacters, process, setProcess } = useMarvelService();
     const itemRefs = useRef([]);
 
     useEffect(() => {
@@ -23,7 +38,8 @@ const CharList = (props) => {
     const onRequest = (offset, initial) => {
         setNewItemLoading(!initial);
         getAllCharacters(offset)
-            .then(onCharsLoaded);
+            .then(onCharsLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
     const onCharsLoaded = (newCharacters) => {
@@ -43,9 +59,6 @@ const CharList = (props) => {
         itemRefs.current[id].classList.add('char__item_selected');
         itemRefs.current[id].focus();
     }
-
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
 
     const charItems = characters.map((item, i) => {
         let imgStyle = { 'objectFit': 'cover' };
@@ -79,9 +92,7 @@ const CharList = (props) => {
 
     return (
         <div className="char__list">
-            {errorMessage}
-            {spinner}
-            <View charItems={charItems} />
+            {setContent(process, charItems, View, newItemLoading)}
             <button
                 className="button button__main button__long"
                 disabled={newItemLoading}
@@ -93,11 +104,11 @@ const CharList = (props) => {
     )
 }
 
-const View = ({ charItems }) => {
+const View = ({ data }) => {
     return (
         <ul className="char__grid">
             <TransitionGroup component={null}>
-                {charItems}
+                {data}
             </TransitionGroup>
         </ul>
 

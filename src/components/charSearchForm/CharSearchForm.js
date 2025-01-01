@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 
 const CharSearchForm = () => {
     const [character, setCharacter] = useState(null);
-    const { loading, error, getCharacterByName, clearError } = useMarvelService();
+    const { getCharacterByName, clearError, process, setProcess } = useMarvelService();
 
     const onCharLoaded = (char) => {
         setCharacter(char);
@@ -19,10 +19,11 @@ const CharSearchForm = () => {
         clearError();
 
         getCharacterByName(name)
-            .then(onCharLoaded);
+            .then(onCharLoaded)
+            .then(() => setProcess('confirmed'));
     }
 
-    const errorMessage = error ? <div className='char__search-critical-error'><ErrorMessage /></div> : null;
+    const errorMessage = process === 'error' ? <div className='char__search-critical-error'><ErrorMessage /></div> : null;
     const results = !character
         ? null
         : character.length > 0
@@ -63,7 +64,7 @@ const CharSearchForm = () => {
                         <button
                             type='submit'
                             className='button button__main'
-                            disabled={loading}>
+                            disabled={process === 'loading'}>
                             <div className='inner'>find</div>
                         </button>
                     </div>
