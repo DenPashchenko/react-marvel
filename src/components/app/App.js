@@ -5,7 +5,7 @@ import { MainPage, ComicsPage, Page404, SingleComicPage, SingleCharacterPage } f
 const App = () => {
 
     return (
-        <Router>
+        <Router basename="/react-marvel">
             <div className="app">
                 <AppHeader />
                 <main>
